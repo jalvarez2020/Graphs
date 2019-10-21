@@ -17,9 +17,8 @@ class Graph:
         """
         Add a directed edge to the graph.
         """
-        if v1 not in self.vertices:
-            edge = self.vertices[v1]
-            edge.add(v2)
+        edge = self.vertices[v1]
+        edge.add(v2)
     
 
     def bft(self, starting_vertex):
@@ -31,11 +30,13 @@ class Graph:
         visited = set()
         q.enqueue(starting_vertex)
         log = []
-        while q.size():
+        while q.size:
             current_node = q.dequeue()
-            if current_node not in visited:
-                visited.add(current_node)
-                log.append(current_node)
+            log.append(current_node)
+            visited.add(current_node)
+            for edge in self.vertices[current_node]:
+                if edge not in visited:
+                    q.enqueue(edge)
         print("Logged", log)
 
 
