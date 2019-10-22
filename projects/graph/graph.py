@@ -50,20 +50,24 @@ class Graph:
         visited = set()
         stack.push(starting_vertex)
         while stack.size:
-            vert = stack.pop()
-            if vert not in visited:
-                visited.add(vert)
-                for neighbor in self.vertices[vert]:
+            current_node = stack.pop()
+            if current_node not in visited:
+                visited.add(current_node)
+                for neighbor in self.vertices[current_node]:
                     stack.push(neighbor)
 
 
-    def dft_recursive(self, starting_vertex):
+    def dft_recursive(self, starting_vertex, visited=None):
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
         This should be done using recursion.
         """
-        pass  # TODO
+        if visited is None:
+            visited = set()
+        for neighbor in self.vertices[starting_vertex]:
+            if neighbor not in visited:
+                self.dft_recursive(neighbor, visited)
 
 
     def bfs(self, starting_vertex, destination_vertex):
@@ -72,14 +76,45 @@ class Graph:
         starting_vertex to destination_vertex in
         breath-first order.
         """
-        pass  # TODO
+        q = Queue()
+        visited = set()
+        q.enqueue([starting_vertex])
+        while q.size():
+            path = q.dequeue()
+            vertex=path[-1]
+            if vertex not in visited:
+                return path
+            visited.add(vertex)
+            for neighbor in self.vertices[vertex]:
+                nPath = list(path)
+                nPath.append(neighbor)
+                q.enqueue(nPath)
+        
+
+
+
+
     def dfs(self, starting_vertex, destination_vertex):
         """
         Return a list containing a path from
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        pass  # TODO
+        stack = Stack()
+        visited = set()
+        stack.push([starting_vertex])
+        while stack.size() > 0:
+            path = stack.pop()
+            vertex = path[-1]
+            if vertex not in visited:
+                if vertex == destination_vertex:
+                    return path
+                visited.add(vertex)
+                for neighbor in self.vertices[vertex]:
+                    new_path = list(path)
+                    new_path.append(neighbor)
+                    stack.push(new_path)
+        
 
 
 
@@ -158,4 +193,4 @@ if __name__ == '__main__':
         [1, 2, 4, 6]
         [1, 2, 4, 7, 6]
     '''
-    print(graph.dfs(1, 6))
+    print("Graph dfs", graph.dfs(1, 6))
