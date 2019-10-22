@@ -17,8 +17,11 @@ class Graph:
         """
         Add a directed edge to the graph.
         """
-        edge = self.vertices[v1]
-        edge.add(v2)
+        if v1 in self.vertices:
+            edge = self.vertices[v1]
+            edge.add(v2)
+        else:
+            raise NameError("Edge already exist")
     
 
     def bft(self, starting_vertex):
@@ -29,15 +32,13 @@ class Graph:
         q = Queue()
         visited = set()
         q.enqueue(starting_vertex)
-        log = []
         while q.size:
             current_node = q.dequeue()
-            log.append(current_node)
-            visited.add(current_node)
-            for edge in self.vertices[current_node]:
-                if edge not in visited:
-                    q.enqueue(edge)
-        print("Logged", log)
+            if current_node not in visited:
+                visited.add(current_node)
+                print(current_node)
+                for node in self.vertices[current_node]:
+                    q.enqueue(node)
 
 
     def dft(self, starting_vertex):
@@ -45,10 +46,17 @@ class Graph:
         Print each vertex in depth-first order
         beginning from starting_vertex.
         """
-        stack = []
+        stack = Stack()
         visited = set()
-        stack.append(starting_vertex)
-        pass  # TODO
+        stack.push(starting_vertex)
+        while stack.size:
+            vert = stack.pop()
+            if vert not in visited:
+                visited.add(vert)
+                for neighbor in self.vertices[vert]:
+                    stack.push(neighbor)
+
+
     def dft_recursive(self, starting_vertex):
         """
         Print each vertex in depth-first order
@@ -56,6 +64,8 @@ class Graph:
         This should be done using recursion.
         """
         pass  # TODO
+
+
     def bfs(self, starting_vertex, destination_vertex):
         """
         Return a list containing the shortest path from
